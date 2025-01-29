@@ -1,9 +1,10 @@
 import React from 'react';
-import FormInput from './FormInput';
-import PickupTimeForm from './PickupTimeForm';
-import PriceInputs from './PriceInputs';
-import OptionInput from './OptionInput';
-import DaySelector from './DaySelector';
+import FormInput from './form_inputs/FormInput';
+import PickupTimeForm from './form_inputs/PickupTimeForm';
+import PriceInputs from './form_inputs/PriceInputs';
+import OptionInput from './form_inputs/OptionInput';
+import DaySelector from './form_inputs/DaySelector';
+import BolgeSelector from './form_inputs/BolgeSelector';
 
 const TourForm = ({
   tourData,
@@ -24,25 +25,12 @@ const TourForm = ({
 }) => {
   return (
     <form onSubmit={onSubmit}>
-      <div className="mb-3">
-        <label className="form-label">
-          <i className="bi bi-geo-alt me-2"></i>
-          Bölgelendirme
-        </label>
-        <select
-          className="form-select"
-          value={tourData.bolgeId || ''}
-          onChange={(e) => onChange({ target: { id: 'bolgeId', value: e.target.value } })}
-        >
-          <option value="">Bölge Seçiniz</option>
-          {bolgeler?.map(bolge => (
-            <option key={bolge.id} value={bolge.id}>
-              {bolge.name}
-            </option>
-          ))}
-        </select>
-      </div>
-        
+      <BolgeSelector 
+        value={tourData.bolgeId}
+        onChange={onChange}
+        bolgeler={bolgeler}
+      />
+      
       {formInputs.map(input => (
         <FormInput
           key={input.id}

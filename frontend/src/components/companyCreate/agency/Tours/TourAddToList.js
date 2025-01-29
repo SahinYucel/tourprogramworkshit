@@ -2,9 +2,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { saveTourData } from '../../../../services/api';
-import TourList from './components/tourList/TourList';
-import RegionList from './components/tourList/RegionList';
-import RegionAreaList from './components/tourList/RegionAreaList';
+import TourList from './components/tourList_sub/TourList';
+import RegionList from './components/tourList_sub/RegionList';
+import RegionAreaList from './components/tourList_sub/RegionAreaList';
 
 const TourAddToList = () => {
   // Tour states

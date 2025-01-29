@@ -13,11 +13,12 @@ export const loadMenuItems = (loggedInUser, company, setMenuItems, setIsMenuLoad
       text: 'Şirketler',
       id: 'companies'
     },
+  
     {
-      path: '/companyAgencyDashboard/guides',
-      icon: 'bi-person-badge',
-      text: 'Rehberler',
-      id: 'guides'
+      path: '/companyAgencyDashboard/safe',
+      icon: 'bi-safe',
+      text: 'Kasa',
+      id: 'safe'
     },
     {
       path: '/companyAgencyDashboard/tours',
@@ -45,17 +46,18 @@ export const loadMenuItems = (loggedInUser, company, setMenuItems, setIsMenuLoad
         }
       ]
     },
+
+    {
+      path: '/companyAgencyDashboard/guides',
+      icon: 'bi-person-badge',
+      text: 'Rehberler',
+      id: 'guides'
+    },
     {
       path: '/companyAgencyDashboard/reports',
       icon: 'bi-file-earmark-text',
       text: 'Raporlar',
       id: 'reports'
-    },
-    {
-      path: '/companyAgencyDashboard/hotels',
-      icon: 'bi-building-add',
-      text: 'Otel Gönder',
-      id: 'hotels'
     },
     {
       path: '/companyAgencyDashboard/database-backup',
@@ -96,7 +98,7 @@ export const loadMenuItems = (loggedInUser, company, setMenuItems, setIsMenuLoad
       guides: false,
       tours: false,
       reports: true,
-      hotels: false,
+      safe: true,
       backup: false,
       settings: false
     },
@@ -106,7 +108,7 @@ export const loadMenuItems = (loggedInUser, company, setMenuItems, setIsMenuLoad
       guides: true,
       tours: true,
       reports: false,
-      hotels: true,
+      safe: false,
       backup: false,
       settings: false
     }

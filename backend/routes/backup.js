@@ -7,9 +7,9 @@ const cron = require('node-cron');
 const multer = require('multer');
 require('dotenv').config();
 
-const DB_USER = process.env.DB_USER;
-const DB_PASSWORD = process.env.DB_PASSWORD;
-const DB_NAME = process.env.DB_NAME;
+const DB_USER = 'sahin';
+const DB_PASSWORD = 'root';
+const DB_NAME = 'tour_program';
 
 // Multer konfigürasyonu
 const storage = multer.diskStorage({

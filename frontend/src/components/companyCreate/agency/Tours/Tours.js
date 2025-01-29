@@ -4,12 +4,12 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import TourForm from './components/TourForm';
 import TourHeader from './components/TourHeader';
 import TourTable from './components/TourTable';
-import { DAYS } from './components/DaySelector';
+import { DAYS } from './components/form_inputs/DaySelector';
 
 const INITIAL_TOUR_STATE = {
   tourName: '',
   operator: '',
-  bolgeId: '',
+  bolgeId: [],
   options: [],
   pickupTimes: [{
     hour: '',
@@ -20,7 +20,8 @@ const INITIAL_TOUR_STATE = {
   adultPrice: '',
   childPrice: '',
   selectedDays: [],
-  editingIndex: null
+  editingIndex: null,
+  isActive: true
 };
 
 const Tours = () => {
@@ -36,6 +37,8 @@ const Tours = () => {
     return saved ? JSON.parse(saved) : [];
   });
   const [editingIndex, setEditingIndex] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [showActive, setShowActive] = useState('all');
 
   useEffect(() => {
     const loadData = () => {
@@ -183,6 +186,11 @@ const Tours = () => {
     }));
   };
 
+  const handleCopy = (tourToCopy) => {
+    const copiedTour = { ...tourToCopy };
+    setCreatedTours(prev => [...prev, copiedTour]);
+  };
+
   const formInputs = useMemo(() => [
     {
       label: 'Tur Adı',
@@ -204,6 +212,36 @@ const Tours = () => {
       }))
     }
   ], [savedTours, savedCompanies]);
+
+  const filteredAndSortedTours = useMemo(() => {
+    return [...createdTours]
+      // Önce arama filtresini uygula
+      .filter(tour => {
+        const searchLower = searchQuery.toLowerCase();
+        return (
+          searchQuery === '' ||
+          tour.tourName.toLowerCase().includes(searchLower) ||
+          tour.operator.toLowerCase().includes(searchLower)
+        );
+      })
+      // Sonra aktif/pasif filtresini uygula
+      .filter(tour => {
+        if (showActive === 'all') return true;
+        return showActive === 'active' ? tour.isActive : !tour.isActive;
+      })
+      // En son sırala
+      .sort((a, b) => {
+        const nameA = a.tourName.toLowerCase();
+        const nameB = b.tourName.toLowerCase();
+        return nameA.localeCompare(nameB);
+      });
+  }, [createdTours, searchQuery, showActive]);
+
+  const handleStatusChange = (tourId) => {
+    setCreatedTours(prev => prev.map(tour => 
+      tour === tourId ? { ...tour, isActive: !tour.isActive } : tour
+    ));
+  };
 
   return (
     <div className="container mt-4">
@@ -243,16 +281,45 @@ const Tours = () => {
 
       <div className="card">
         <div className="card-header">
-          <h4 className="mb-0">
-            <i className="bi bi-table me-2"></i>
-            Oluşturulan Turlar
-          </h4>
+          <div className="d-flex justify-content-between align-items-center">
+            <h4 className="mb-0">
+              <i className="bi bi-table me-2"></i>
+              Oluşturulan Turlar
+            </h4>
+            <div className="d-flex gap-3 align-items-center">
+              <div className="input-group" style={{ width: '300px' }}>
+                <span className="input-group-text">
+                  <i className="bi bi-search"></i>
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Tur veya operatör ara..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+              <select
+                className="form-select"
+                value={showActive}
+                onChange={(e) => setShowActive(e.target.value)}
+                style={{ width: 'auto' }}
+              >
+                <option value="all">Tümü</option>
+                <option value="active">Aktif</option>
+                <option value="inactive">Pasif</option>
+              </select>
+            </div>
+          </div>
         </div>
         <div className="card-body">
           <TourTable 
-            tours={createdTours}
+            tours={filteredAndSortedTours}
             onEdit={handleEdit}
             onDelete={handleDelete}
+            bolgeler={bolgeler}
+            onCopy={handleCopy}
+            onStatusChange={handleStatusChange}
           />
         </div>
       </div>

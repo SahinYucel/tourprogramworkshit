@@ -1,6 +1,5 @@
 import React, { Suspense, lazy } from 'react';
 import { Routes, Route } from 'react-router-dom';
-import Reservations from './Tours/Reservations';
 
 
 // Lazy load components
@@ -11,7 +10,9 @@ const Tours = lazy(() => import('./Tours/Tours'));
 const TourAddToList = lazy(() => import('./Tours/TourAddToList'));
 const DatabaseBackup = lazy(() => import('./DatabaseBackup'));
 const Companies = lazy(() => import('./companies/Companies'));
-
+const Safe = lazy(() => import('./safe/Safe'));
+const Reservations = lazy(() => import('./Tours/Reservations'));
+const Guides = lazy(() => import('./guides/Guides'));
 // Loading component for Suspense fallback
 const LoadingSpinner = () => (
   <div className="d-flex justify-content-center p-5">
@@ -27,14 +28,14 @@ function MenuSliderRoute({ company, subscription, setIsLoggedIn }) {
       <Routes>
         <Route path="/" element={<DashboardHome company={company} subscription={subscription} setIsLoggedIn={setIsLoggedIn} />} />
         <Route path="/companies" element={<Companies />} />
-        <Route path="/guides" element={<div>Rehberler (Yakında)</div>} />
+        <Route path="/guides" element={<Guides />} />
         <Route path="/tours">
           <Route path="create" element={<Tours />} />
           <Route path="listeler" element={<TourAddToList />} />
           <Route path="rezervasyonlar" element={<Reservations />} />
         </Route>
         <Route path="/reports" element={<div>Raporlar (Yakında)</div>} />
-        <Route path="/hotels" element={<div>Otel Gönder (Yakında)</div>} />
+        <Route path="/safe" element={<Safe />} />
         <Route path="/settings" element={<Settings company={company} />} />
         <Route path="/role-management" element={<RoleManagement company={company} />} />
         <Route path="/database-backup" element={<DatabaseBackup />} />

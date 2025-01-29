@@ -1,6 +1,12 @@
 import React from 'react';
+import StatusCell from './table/StatusCell';
+import BolgeCell from './table/BolgeCell';
+import TimeCell from './table/TimeCell';
+import PriceCell from './table/PriceCell';
+import DaysCell from './table/DaysCell';
+import ActionButtons from './table/ActionButtons';
 
-const TourTable = ({ tours, onEdit, onDelete }) => {
+const TourTable = ({ tours, onEdit, onDelete, bolgeler, onCopy, onStatusChange }) => {
   if (!tours.length) {
     return (
       <div className="alert alert-info">
@@ -10,46 +16,15 @@ const TourTable = ({ tours, onEdit, onDelete }) => {
     );
   }
 
-  const formatTime = (time) => {
-    const hour = time.hour.toString().padStart(2, '0');
-    const minute = time.minute.toString().padStart(2, '0');
-    return `${hour}:${minute}`;
-  };
-
-  const formatTimes = (times) => {
-    if (!Array.isArray(times)) {
-      // Handle legacy data with single time
-      return formatTime(times);
-    }
-    return times.map(time => (
-      `${formatTime(time)} (${time.region} - ${time.area})`
-    )).join(', ');
-  };
-
-  const formatDays = (days) => {
-    const dayMap = {
-      monday: 'Pzt',
-      tuesday: 'Sal',
-      wednesday: 'Çar',
-      thursday: 'Per',
-      friday: 'Cum',
-      saturday: 'Cmt',
-      sunday: 'Paz'
-    };
-    return days.map(day => dayMap[day]).join(', ');
-  };
-
-  const formatPrice = (price) => {
-    return price ? `${price} €` : '-';
-  };
-
   return (
     <div className="table-responsive">
       <table className="table table-hover">
         <thead className="table-light">
           <tr>
+            <th>Durum</th>
             <th>Tur Adı</th>
             <th>Operatör</th>
+            <th>Bölgeler</th>
             <th>Alınış Saatleri ve Konumları</th>
             <th>Fiyatlar</th>
             <th>Günler</th>
@@ -60,6 +35,13 @@ const TourTable = ({ tours, onEdit, onDelete }) => {
         <tbody>
           {tours.map((tour, index) => (
             <tr key={index}>
+              <td>
+                <StatusCell 
+                  isActive={tour.isActive}
+                  onChange={() => onStatusChange(tour)}
+                  index={index}
+                />
+              </td>
               <td>{tour.tourName}</td>
               <td>
                 {tour.operator}
@@ -70,31 +52,19 @@ const TourTable = ({ tours, onEdit, onDelete }) => {
                 )}
               </td>
               <td>
-                <div className="d-flex flex-column gap-1">
-                  {(tour.pickupTimes || [tour.pickupTime]).map((time, i) => (
-                    <div key={i} className="badge bg-light text-dark">
-                      {formatTime(time)} 
-                      {time.region && time.area && (
-                        <span className="ms-1 text-muted">
-                          ({time.region} - {time.area})
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
+                <BolgeCell bolgeIds={tour.bolgeId} bolgeler={bolgeler} />
               </td>
               <td>
-                <div className="d-flex flex-column">
-                  <small className="text-muted">Adult:</small>
-                  <div>{formatPrice(tour.adultPrice)}</div>
-                  <small className="text-muted mt-1">Child:</small>
-                  <div>{formatPrice(tour.childPrice)}</div>
-                </div>
+                <TimeCell times={tour.pickupTimes || [tour.pickupTime]} />
               </td>
               <td>
-                <div className="badge bg-light text-dark">
-                  {formatDays(tour.selectedDays)}
-                </div>
+                <PriceCell 
+                  adultPrice={tour.adultPrice}
+                  childPrice={tour.childPrice}
+                />
+              </td>
+              <td>
+                <DaysCell selectedDays={tour.selectedDays} />
               </td>
               <td>
                 <div style={{ maxWidth: '200px' }}>
@@ -106,22 +76,11 @@ const TourTable = ({ tours, onEdit, onDelete }) => {
                 </div>
               </td>
               <td>
-                <div className="btn-group">
-                  <button
-                    className="btn btn-sm btn-outline-primary"
-                    onClick={() => onEdit(tour)}
-                    title="Düzenle"
-                  >
-                    <i className="bi bi-pencil-square"></i>
-                  </button>
-                  <button
-                    className="btn btn-sm btn-outline-danger"
-                    onClick={() => onDelete(tour)}
-                    title="Sil"
-                  >
-                    <i className="bi bi-trash"></i>
-                  </button>
-                </div>
+                <ActionButtons
+                  onEdit={() => onEdit(tour)}
+                  onDelete={() => onDelete(tour)}
+                  onCopy={() => onCopy(tour)}
+                />
               </td>
             </tr>
           ))}

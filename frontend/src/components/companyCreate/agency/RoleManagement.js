@@ -8,7 +8,7 @@ const pages = [
   { id: 'guides', name: 'Rehberler', icon: 'bi-person-badge' },
   { id: 'tours', name: 'Turlar', icon: 'bi-map' },
   { id: 'reports', name: 'Raporlar', icon: 'bi-file-earmark-text' },
-  { id: 'hotels', name: 'Otel Gönder', icon: 'bi-building-add' },
+  { id: 'safe', name: 'Kasa', icon: 'bi-safe' },
   { id: 'backup', name: 'Veri Tabanı Yedekleme', icon: 'bi-database-down' },
   { id: 'settings', name: 'Ayarlar', icon: 'bi-gear' }
 ];
@@ -25,7 +25,7 @@ const defaultPermissions = {
     guides: false,
     tours: false,
     reports: true,
-    hotels: false,
+    safe: true,
     backup: true,
     settings: false
   },
@@ -35,7 +35,7 @@ const defaultPermissions = {
     guides: true,
     tours: true,
     reports: false,
-    hotels: true,
+    safe: false,
     backup: false,
     settings: false
   }
