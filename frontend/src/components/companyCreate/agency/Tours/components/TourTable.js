@@ -1,12 +1,18 @@
-import React from 'react';
-import StatusCell from './table/StatusCell';
-import BolgeCell from './table/BolgeCell';
-import TimeCell from './table/TimeCell';
-import PriceCell from './table/PriceCell';
-import DaysCell from './table/DaysCell';
-import ActionButtons from './table/ActionButtons';
+import React, { useState } from 'react';
+import TourTableHeader from './table/TourTableHeader';
+import TourTableRow from './table/TourTableRow';
+import TourTableExpandedRow from './table/TourTableExpandedRow';
 
 const TourTable = ({ tours, onEdit, onDelete, bolgeler, onCopy, onStatusChange }) => {
+  const [expandedRows, setExpandedRows] = useState({});
+
+  const toggleRow = (index) => {
+    setExpandedRows(prev => ({
+      ...prev,
+      [index]: !prev[index]
+    }));
+  };
+
   if (!tours.length) {
     return (
       <div className="alert alert-info">
@@ -18,71 +24,28 @@ const TourTable = ({ tours, onEdit, onDelete, bolgeler, onCopy, onStatusChange }
 
   return (
     <div className="table-responsive">
-      <table className="table table-hover">
-        <thead className="table-light">
-          <tr>
-            <th>Durum</th>
-            <th>Tur Adı</th>
-            <th>Operatör</th>
-            <th>Bölgeler</th>
-            <th>Alınış Saatleri ve Konumları</th>
-            <th>Fiyatlar</th>
-            <th>Günler</th>
-            <th>Opsiyonlar</th>
-            <th>İşlemler</th>
-          </tr>
-        </thead>
+      <table className="table table-borderless">
+        <TourTableHeader />
         <tbody>
           {tours.map((tour, index) => (
-            <tr key={index}>
-              <td>
-                <StatusCell 
-                  isActive={tour.isActive}
-                  onChange={() => onStatusChange(tour)}
-                  index={index}
+            <React.Fragment key={index}>
+              <TourTableRow 
+                tour={tour}
+                index={index}
+                isExpanded={expandedRows[index]}
+                onToggle={toggleRow}
+                onEdit={onEdit}
+                onDelete={onDelete}
+                onCopy={onCopy}
+                onStatusChange={onStatusChange}
+              />
+              {expandedRows[index] && (
+                <TourTableExpandedRow 
+                  tour={tour}
+                  bolgeler={bolgeler}
                 />
-              </td>
-              <td>{tour.tourName}</td>
-              <td>
-                {tour.operator}
-                {tour.operatorId && (
-                  <div>
-                    <small className="text-muted">AlphanumericId: {tour.operatorId}</small>
-                  </div>
-                )}
-              </td>
-              <td>
-                <BolgeCell bolgeIds={tour.bolgeId} bolgeler={bolgeler} />
-              </td>
-              <td>
-                <TimeCell times={tour.pickupTimes || [tour.pickupTime]} />
-              </td>
-              <td>
-                <PriceCell 
-                  adultPrice={tour.adultPrice}
-                  childPrice={tour.childPrice}
-                />
-              </td>
-              <td>
-                <DaysCell selectedDays={tour.selectedDays} />
-              </td>
-              <td>
-                <div style={{ maxWidth: '200px' }}>
-                  {tour.options.map((opt, i) => (
-                    <div key={i} className="badge bg-info text-white me-1 mb-1">
-                      {opt.name}: {opt.price}€
-                    </div>
-                  ))}
-                </div>
-              </td>
-              <td>
-                <ActionButtons
-                  onEdit={() => onEdit(tour)}
-                  onDelete={() => onDelete(tour)}
-                  onCopy={() => onCopy(tour)}
-                />
-              </td>
-            </tr>
+              )}
+            </React.Fragment>
           ))}
         </tbody>
       </table>

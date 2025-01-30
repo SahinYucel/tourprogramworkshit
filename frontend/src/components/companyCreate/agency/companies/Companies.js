@@ -3,7 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { saveProviders, getProviders } from '../../../../services/api'
 import CompanyForm from './CompanyForm'
 import CompanyTable from './CompanyTable'
-import { generateAlphanumericId, formatPhoneNumber } from './companyUtils'
+import { generateAlphanumericId, formatPhoneNumber, capitalizeCompanyName } from './companyUtils'
 
 export default function Companies() {
   const [formData, setFormData] = useState({ companyName: '', phoneNumber: '' })
@@ -47,7 +47,14 @@ export default function Companies() {
     const { name, value, id: inputId } = e.target
     const field = name || inputId
     const isPhone = field === 'phoneNumber'
-    const formattedValue = isPhone ? formatPhoneNumber(value) : value
+    const isCompanyName = field === 'companyName'
+    
+    let formattedValue = value
+    if (isPhone) {
+      formattedValue = formatPhoneNumber(value)
+    } else if (isCompanyName) {
+      formattedValue = capitalizeCompanyName(value)
+    }
 
     if (id) {
       setCompanies(prev => prev.map(company =>

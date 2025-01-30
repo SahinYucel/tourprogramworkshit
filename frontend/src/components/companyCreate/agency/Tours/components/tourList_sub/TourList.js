@@ -22,7 +22,7 @@ const TourList = ({
 
   const handleSave = (id) => {
     if (!editValue.trim()) return;
-    onUpdate(id, editValue.trim());
+    onUpdate(id, editValue.trim().toUpperCase());
     setEditingId(null);
     setEditValue('');
   };
@@ -49,10 +49,10 @@ const TourList = ({
           <div className="input-group">
             <input
               type="text"
-              className="form-control"
+              className="form-control text-uppercase"
               placeholder="Tur adı giriniz"
               value={tourName}
-              onChange={(e) => setTourName(e.target.value)}
+              onChange={(e) => setTourName(e.target.value.toUpperCase())}
             />
             <button type="submit" className="btn btn-primary">
               <i className="bi bi-plus-lg me-2"></i>Ekle
@@ -78,9 +78,9 @@ const TourList = ({
                       {editingId === tour.id ? (
                         <input
                           type="text"
-                          className="form-control"
+                          className="form-control text-uppercase"
                           value={editValue}
-                          onChange={(e) => setEditValue(e.target.value)}
+                          onChange={(e) => setEditValue(e.target.value.toUpperCase())}
                         />
                       ) : tour.name}
                     </td>

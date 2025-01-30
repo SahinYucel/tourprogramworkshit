@@ -112,7 +112,7 @@ export default function Safe() {
                   <label htmlFor="name" className="form-label">Kasa İsmi</label>
                   <input 
                     type="text"
-                    className="form-control"
+                    className="form-control text-uppercase"
                     id="name"
                     name="name"
                     value={formData.name}

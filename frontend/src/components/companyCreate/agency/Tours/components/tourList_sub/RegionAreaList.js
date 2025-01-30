@@ -38,11 +38,11 @@ const RegionAreaList = ({
   const handleSave = (type, id, regionId = null) => {
     if (type === 'region') {
       if (!editRegionValue.trim()) return;
-      onRegionUpdate(id, editRegionValue.trim());
+      onRegionUpdate(id, editRegionValue.trim().toUpperCase());
       setEditRegionValue('');
     } else {
       if (!editAreaValue.trim()) return;
-      onAreaUpdate(regionId, id, editAreaValue.trim());
+      onAreaUpdate(regionId, id, editAreaValue.trim().toUpperCase());
       setEditAreaValue('');
     }
     setEditingRegionId(null);
@@ -74,10 +74,10 @@ const RegionAreaList = ({
           <div className="input-group">
             <input
               type="text"
-              className="form-control"
+              className="form-control text-uppercase"
               placeholder="Bölge adı giriniz"
               value={regionName}
-              onChange={(e) => setRegionName(e.target.value)}
+              onChange={(e) => setRegionName(e.target.value.toUpperCase())}
             />
             <button type="submit" className="btn btn-primary">
               <i className="bi bi-plus-lg me-2"></i>Bölge Ekle
@@ -103,10 +103,10 @@ const RegionAreaList = ({
             </select>
             <input
               type="text"
-              className="form-control"
+              className="form-control text-uppercase"
               placeholder="Alan adı giriniz"
               value={areaName}
-              onChange={(e) => setAreaName(e.target.value)}
+              onChange={(e) => setAreaName(e.target.value.toUpperCase())}
               disabled={!selectedRegionId}
             />
             <button 
@@ -139,9 +139,9 @@ const RegionAreaList = ({
                         {editingRegionId === region.id ? (
                           <input
                             type="text"
-                            className="form-control"
+                            className="form-control text-uppercase"
                             value={editRegionValue}
-                            onChange={(e) => setEditRegionValue(e.target.value)}
+                            onChange={(e) => setEditRegionValue(e.target.value.toUpperCase())}
                           />
                         ) : region.name}
                       </td>
@@ -186,9 +186,9 @@ const RegionAreaList = ({
                           {editingAreaId === area.id ? (
                             <input
                               type="text"
-                              className="form-control"
+                              className="form-control text-uppercase"
                               value={editAreaValue}
-                              onChange={(e) => setEditAreaValue(e.target.value)}
+                              onChange={(e) => setEditAreaValue(e.target.value.toUpperCase())}
                             />
                           ) : area.name}
                         </td>
